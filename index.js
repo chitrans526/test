@@ -17,8 +17,8 @@ app.use(
 app.get("/set-cookie", (req, res) => {
     res.cookie("token", "abc123", {
         httpOnly: true,   // JS can't access it
-        secure: false,    // true only for HTTPS
-        sameSite: "lax",
+        secure: true,    // true only for HTTPS
+        sameSite: "none",
         maxAge: 24 * 60 * 60 * 1000 // 1 day
     });
 
