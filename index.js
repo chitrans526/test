@@ -30,7 +30,7 @@ app.get("/set-cookie", (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-        domain: "https://testfronend-two.vercel.app",
+        domain: "testfronend-two.vercel.app",
         maxAge: 24 * 60 * 60 * 1000,
     });
 
