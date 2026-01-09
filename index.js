@@ -1,41 +1,60 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const app = express();
-const PORT = 3000;
 
-app.use(cookieParser());
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+/**
+ * REQUIRED when behind HTTPS proxy (Render / Railway / Vercel / Nginx)
+ */
+app.set("trust proxy", 1);
+
+/**
+ * CORS must allow frontend + credentials
+ */
 app.use(
     cors({
-        origin: ["http://localhost:3001", "https://testfronend-two.vercel.app"],
+        origin: "https://testfronend-two.vercel.app",
         credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
     })
 );
 
+app.use(cookieParser());
+
+/**
+ * SET COOKIE
+ */
 app.get("/set-cookie", (req, res) => {
     res.cookie("token", "abc123", {
-        httpOnly: true,   // JS can't access it
-        secure: true,    // true only for HTTPS
+        httpOnly: true,
+        secure: true,
         sameSite: "none",
-        maxAge: 24 * 60 * 60 * 1000 // 1 day
+        maxAge: 24 * 60 * 60 * 1000,
     });
 
-    res.send("Cookie has been set 🍪");
+    res.status(200).send("Cookie set");
 });
 
+/**
+ * READ COOKIE
+ */
 app.get("/get-cookie", (req, res) => {
-    res.json({
-        cookies: req.cookies
-    });
+    res.status(200).json({ token: req.cookies.token });
 });
 
+/**
+ * CLEAR COOKIE
+ */
 app.get("/clear-cookie", (req, res) => {
-    res.clearCookie("token");
-    res.send("Cookie cleared");
+    res.clearCookie("token", {
+        secure: true,
+        sameSite: "none",
+    });
+
+    res.status(200).send("Cookie cleared");
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
