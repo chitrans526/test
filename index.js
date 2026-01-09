@@ -7,7 +7,7 @@ const PORT = 3000;
 app.use(cookieParser());
 app.use(
     cors({
-        origin: ["http://localhost:3001", "https://tangerine-cuchufli-ae16f8.netlify.app"],
+        origin: ["http://localhost:3001", "https://testfronend-two.vercel.app"],
         credentials: true,
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization"],
